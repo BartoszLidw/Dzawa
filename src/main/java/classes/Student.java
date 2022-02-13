@@ -1,41 +1,40 @@
 package classes;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "student")
 public class Student {
     @Id
-    private int Id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @javax.persistence.Column(name = "id", nullable = false)
+    private int id;
     private String name;
     private String surname;
     private Dormitory dormitory;
-    @ManyToMany
-    private List<Classroom> classes;
-    @OneToMany
-    private List<Mark> marks;
+    @ManyToMany(mappedBy = "students")
+    private List<Classroom> classes = new ArrayList<>();;
+    @OneToMany(mappedBy = "student")
+    private List<Mark> marks = new ArrayList<>();;
 
 
 
 
     public Student() {
-        this.name = " name ";
-        this.surname = " surname ";
     }
-    public Student(int id, String name, String surname, Dormitory dormitory)
+    public Student(String name, String surname, Dormitory dormitory)
     {
-        Id = id;
+        id = id;
         this.name = name;
         this.surname = surname;
         this.dormitory = dormitory;
     }
-    public Student(int id, String name, String surname, List<Classroom> classes, List<Mark> marks) {
-        Id = id;
-        this.name = name;
-        this.surname = surname;
-        this.classes = classes;
-        this.marks = marks;
+
+    public void addMark(Mark mark)
+    {
+        this.marks.add(mark);
     }
 
     public String getName() {
